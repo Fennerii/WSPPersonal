@@ -30,7 +30,7 @@ on campus and was very happy to get a seat in it. I am very excited to learn mor
 dev through your course to see what I will be able to do during and after the course
 
 <picture>
- <source media="(prefers-color-scheme: dark)" srcset="YOUR-DARKMODE-IMAGE">
- <source media="(prefers-color-scheme: light)" srcset="YOUR-LIGHTMODE-IMAGE">
- <img alt="YOUR-ALT-TEXT" src="">
+ <source media="(prefers-color-scheme: dark)" srcset="https://github.com/Fennerii/WSPPersonal/blob/main/Screenshot%202026-02-01%20at%2013-51-09%20Jonathan%20Fenner%20II.pdf.png">
+ <source media="(prefers-color-scheme: light)" srcset="Y[OUR-LIGHTMODE-IMAGE](https://github.com/Fennerii/WSPPersonal/blob/main/Screenshot%202026-02-01%20at%2013-51-09%20Jonathan%20Fenner%20II.pdf.png)">
+ <img alt="Photo-Of-Me" src="https://github.com/Fennerii/WSPPersonal/blob/main/Screenshot%202026-02-01%20at%2013-51-09%20Jonathan%20Fenner%20II.pdf.png">
 </picture>
