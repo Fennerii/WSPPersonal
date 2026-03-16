@@ -14,7 +14,7 @@ export const useUsersStore = defineStore('users', () => {
 
   const users = ref<User[]>([
   { id: '1', name: 'Jonathan Fenner', username: 'fennerii', role: 'admin', friends: ['2', '3'], photo: '/nightfly.jpg' },
-  { id: '2', name: 'Bilbo Swaggins', username: 'FellowshipOfTheBling', role: 'user',  friends: ['1', '3'], photo: '/bilboswaggins.jpg' },
+  { id: '2', name: 'Bilbo Swaggins', username: 'FellowshipOfTheBling', role: 'user',  friends: ['1', '3'], photo: '/bilbowaggins.jpg' },
   { id: '3', name: 'Marty Reisman', username: 'MartySupreme', role: 'user',  friends: ['1', '2'], photo: '/marty.jpg' },
   { id: '4', name: 'Kayleigh Rose Amstutz', username: 'ChappellRoan', role: 'user',  friends: ['1'],photo: '/bigchappell.jpg' },
 ])
