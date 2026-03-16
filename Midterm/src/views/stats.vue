@@ -94,7 +94,6 @@ const byType = computed(() => {
 
 const mostRecent = computed(() => {
   if (!userActivities.value.length) return null
-  // slice first so we don't mutate the original array
   return [...userActivities.value].sort((a, b) =>
     new Date(b.date).getTime() - new Date(a.date).getTime()
   )[0]

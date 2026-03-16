@@ -66,7 +66,6 @@ const userActivities = computed(() =>
   activitiesStore.getActivitiesByUser(authStore.currentUser!.id)
 )
 
-// just summing up for the stat cards
 const totalMinutes = computed(() => userActivities.value.reduce((sum, a) => sum + a.duration, 0))
 const totalCalories = computed(() => userActivities.value.reduce((sum, a) => sum + a.calories, 0))
 </script>
