@@ -50,6 +50,7 @@ const users = ref([
   { id: 'u1', name: 'Jonathan Fenner', role: 'admin' },
   { id: 'u2', name: 'Bilbo Swaggins',    role: 'user' },
   { id: 'u3', name: 'Marty Reisman' , role: 'user' },
+  { id: 'u4', name: 'Kayleigh Rose Amstutz' , role: 'user'}
 ])
 
 const selectedUser = ref('')
