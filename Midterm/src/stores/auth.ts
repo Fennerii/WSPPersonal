@@ -10,11 +10,11 @@ interface User{
 }
 
 export const useAuthStore = defineStore('auth', () => {
-     const currentUser = ref<user | null>(null)
+     const currentUser = ref<User | null>(null)
     const isLoggedIn = computed(() => currentUser.value !== null)
      const isAdmin = computed(() => currentUser.value?.role === 'admin')
 
-     function login(user: user){
+     function login(user: User){
         currentUser.value =user
      }
 
