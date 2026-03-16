@@ -17,8 +17,8 @@
                   <div class="select is-fullwidth">
                     <select v-model="selectedUser">
                       <option value="">Select a user...</option>
-                      <option v-for="user in users" :key="user.id" :value="user">
-                        {{ user.name }} ({{ user.role }})
+                        <option v-for="user in usersStore.users" :key="user.id" :value="user">                        
+                          {{ user.name }} ({{ user.role }})
                       </option>
                     </select>
                   </div>
@@ -40,20 +40,17 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
+import { useUsersStore } from '../stores/users'
 
 const router = useRouter()
+const authStore = useAuthStore()
+const usersStore = useUsersStore()
 
-const users = ref([
-  { id: 'u1', name: 'Jonathan Fenner', role: 'admin' },
-  { id: 'u2', name: 'Bilbo Swaggins',    role: 'user' },
-  { id: 'u3', name: 'Marty Reisman' , role: 'user' },
-  { id: 'u4', name: 'Kayleigh Rose Amstutz' , role: 'user'}
-])
-
-const selectedUser = ref('')
+const selectedUser = ref(null)
 const error = ref(false)
 
 function login() {
@@ -61,7 +58,7 @@ function login() {
     error.value = true
     return
   }
-  error.value = false
+  authStore.login(selectedUser.value)
   router.push('/dashboard')
 }
 </script>
