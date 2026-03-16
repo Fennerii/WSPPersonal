@@ -5,10 +5,7 @@
         <div class="columns is-centered">
           <div class="column is-4">
             <div class="box">
-
-              <h1 class="title has-text-centered">
-                HeavyLifting
-              </h1>
+              <h1 class="title has-text-centered">HeavyLifting</h1>
               <p class="subtitle has-text-centered has-text-grey">One Rep At A Time</p>
 
               <div class="field">
@@ -17,8 +14,8 @@
                   <div class="select is-fullwidth">
                     <select v-model="selectedUser">
                       <option value="">Select a user...</option>
-                        <option v-for="user in usersStore.users" :key="user.id" :value="user">                        
-                          {{ user.name }} ({{ user.role }})
+                      <option v-for="user in usersStore.users" :key="user.id" :value="user">
+                        {{ user.name }} ({{ user.role }})
                       </option>
                     </select>
                   </div>
@@ -26,12 +23,11 @@
                 </div>
               </div>
 
-              <p v-if="error" class="has-text-danger">Please select a user.</p>
+              <p v-if="error" class="has-text-danger mb-3">Please select a user.</p>
 
-              <button class="button is-primary is-fullwidth mt-4" @click="login">
+              <button type="button" class="button is-primary is-fullwidth mt-4" @click="handleLogin">
                 Sign In
               </button>
-
             </div>
           </div>
         </div>
@@ -45,15 +41,16 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useUsersStore } from '../stores/users'
+import type { User } from '../types/user'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const usersStore = useUsersStore()
 
-const selectedUser = ref(null)
+const selectedUser = ref<User | null>(null)
 const error = ref(false)
 
-function login() {
+function handleLogin() {
   if (!selectedUser.value) {
     error.value = true
     return
