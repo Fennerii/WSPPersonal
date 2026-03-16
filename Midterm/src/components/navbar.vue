@@ -22,6 +22,13 @@
           </span>
         </RouterLink>
 
+        <RouterLink to="/stats" class="navbar-item">
+          <span class="icon-text">
+            <span class="icon"><i class="fas fa-chart-bar"></i></span>
+            <span>Stats</span>
+          </span>
+        </RouterLink>
+
         <RouterLink to="/friends" class="navbar-item">
           <span class="icon-text">
             <span class="icon"><i class="fas fa-users"></i></span>
@@ -29,12 +36,6 @@
           </span>
         </RouterLink>
 
-        <RouterLink to="/stats" class="navbar-item">
-          <span class="icon-text">
-            <span class="icon"><i class="fas fa-chart-bar"></i></span>
-            <span>Stats</span>
-          </span>
-        </RouterLink>
       </div>
 
       <div class="navbar-end">
