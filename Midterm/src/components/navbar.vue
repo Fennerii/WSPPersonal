@@ -55,5 +55,10 @@
   </nav>
 </template>
 
+<style scoped>
+.navbar , .navbar-item, .navbar-item{
+    font-family: 'Noto';
+}
+</style>
 <script setup>
 </script>
