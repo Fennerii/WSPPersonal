@@ -47,7 +47,9 @@
         <div class="navbar-item">
           <button class="button is-danger is-light is-small">
             <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+            <RouterLink to="/login">
             <span>Sign out</span>
+            </RouterLink>
           </button>
         </div>
       </div>
