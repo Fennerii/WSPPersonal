@@ -3,14 +3,13 @@ export type { DataEnvelope, DataListEnvelope } from "./dataEnvelopes"
 export type UserRole = "admin" | "user"
 
 export type User = {
-    id: string
+    id: number
     name: string
     username: string
     role: UserRole
     photo: string
     password: string
 }
-
 export const userKeys: (keyof User)[] = [
     "name",
     "username",
@@ -19,11 +18,13 @@ export const userKeys: (keyof User)[] = [
     "password",
 ]
 
-export type Activity = {
+export type ActivityType = {
     id: number
     name: string
 }
-export const activityKeys: (keyof Activity)[] = ["name"]
+export const activityTypeKeys: (keyof ActivityType)[] = [
+    "name",
+]
 
 export type Activity = {
     id: number

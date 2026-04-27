@@ -1,9 +1,9 @@
-import { activityTypeKeys, type ActivityType } from "../types/index"
+import { userKeys, type User } from "../types/index"
 import { connect, filterKeys, toCamelCase, toSnakeCase } from "./supabase"
 
-const TABLE_NAME = "activity_types"
+const TABLE_NAME = "users"
 
-type ItemType = ActivityType
+type ItemType = User
 
 export async function getAll() {
     const db = connect()
@@ -20,17 +20,27 @@ export async function get(id: number): Promise<ItemType> {
     const db = connect()
     const result = await db.from(TABLE_NAME).select("*").eq("id", id).single()
     if (result.error) {
-        const error = { status: 404, message: "Activity type not found" }
+        const error = { status: 404, message: "User not found" }
         throw error
     }
     return toCamelCase(result.data) as ItemType
 }
 
-export async function create(item: ItemType): Promise<ItemType> {
+export async function getByUsername(username: string): Promise<ItemType> {
+    const db = connect()
+    const result = await db.from(TABLE_NAME).select("*").eq("username", username).single()
+    if (result.error) {
+        const error = { status: 404, message: "User not found" }
+        throw error
+    }
+    return toCamelCase(result.data) as ItemType
+}
+
+export async function create(user: ItemType): Promise<ItemType> {
     const db = connect()
     const result = await db
         .from(TABLE_NAME)
-        .insert(toSnakeCase(filterKeys(item, activityTypeKeys)))
+        .insert(toSnakeCase(filterKeys(user, userKeys)))
         .select()
         .single()
     if (result.error) {
@@ -39,11 +49,11 @@ export async function create(item: ItemType): Promise<ItemType> {
     return toCamelCase(result.data) as ItemType
 }
 
-export async function update(id: number, item: Partial<ItemType>): Promise<ItemType> {
+export async function update(id: number, user: Partial<ItemType>): Promise<ItemType> {
     const db = connect()
     const result = await db
         .from(TABLE_NAME)
-        .update(toSnakeCase(item))
+        .update(toSnakeCase(user))
         .eq("id", id)
         .select()
         .single()
@@ -69,15 +79,13 @@ export async function remove(id: number): Promise<ItemType> {
 
 export async function seed() {
     const db = connect()
-    const types = [
-        { name: "running" },
-        { name: "gym" },
-        { name: "cycling" },
-        { name: "swimming" },
-        { name: "yoga" },
-        { name: "hiking" },
+    const items = [
+        { name: "Jonathan Fenner", username: "fennerii", role: "admin", photo: "/nightfly.jpg", password: "password" },
+        { name: "Bilbo Swaggins", username: "FellowshipOfTheBling", role: "user", photo: "/bilbowaggins.jpg", password: "password" },
+        { name: "Marty Reisman", username: "MartySupreme", role: "user", photo: "/marty.jpg", password: "password" },
+        { name: "Kayleigh Rose Amstutz", username: "ChappellRoan", role: "user", photo: "/bigchappell.jpg", password: "password" },
     ]
-    const result = await db.from(TABLE_NAME).insert(types)
+    const result = await db.from(TABLE_NAME).insert(items)
     if (result.error) {
         throw result.error
     }
