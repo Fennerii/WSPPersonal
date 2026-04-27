@@ -4,7 +4,16 @@ import { User, DataEnvelope, DataListEnvelope } from "../types/index"
 
 const app = Router()
 
-app.get("/", async (req, res) => {
+app.post("/login", async (req, res) => {
+    const { username } = req.body
+    const user = await getByUsername(username)
+    const response: DataEnvelope<User> = {
+        data: user,
+        isSuccess: true,
+    }
+    res.send(response)
+})
+.get("/", async (req, res) => {
     const { list, count } = await getAll()
     const response: DataListEnvelope<User> = {
         data: list,
@@ -17,15 +26,6 @@ app.get("/", async (req, res) => {
     const { id } = req.params
     const response: DataEnvelope<User> = {
         data: await get(Number(id)),
-        isSuccess: true,
-    }
-    res.send(response)
-})
-.post("/login", async (req, res) => {
-    const { username } = req.body
-    const user = await getByUsername(username)
-    const response: DataEnvelope<User> = {
-        data: user,
         isSuccess: true,
     }
     res.send(response)

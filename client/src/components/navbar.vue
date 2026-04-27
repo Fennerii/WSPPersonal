@@ -31,21 +31,20 @@
             <span>Friends</span>
           </span>
         </RouterLink>
-        <RouterLink v-if="authStore.isAdmin" to="/admin" class="navbar-item">
+        <RouterLink v-if="sessionStore.user?.role === 'admin'" to="/admin" class="navbar-item">
           <span class="icon-text">
             <span class="icon"><i class="fas fa-cog"></i></span>
             <span>Admin</span>
           </span>
         </RouterLink>
       </div>
-
       <div class="navbar-end">
         <div class="navbar-item">
           <span class="icon-text has-text-grey-light">
             <figure class="image is-64x128">
-              <img class="is-square" :src="authStore.currentUser?.photo" />
+              <img class="is-square" :src="sessionStore.user?.photo" />
             </figure>
-            <span>{{ authStore.currentUser?.name }}</span>
+            <span>{{ sessionStore.user?.name }}</span>
           </span>
         </div>
         <div class="navbar-item">
@@ -60,20 +59,20 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '../stores/auth'
+import useSessionStore from '../stores/session'
 import { useRouter } from 'vue-router'
 
-const authStore = useAuthStore()
+const sessionStore = useSessionStore()
 const router = useRouter()
 
 function logout() {
-  authStore.logout()
-  router.push('/login')
+    sessionStore.user = null
+    router.push('/login')
 }
 </script>
 
 <style scoped>
 .navbar, .navbar-item {
-  font-family: 'Noto';
+    font-family: 'Noto';
 }
 </style>

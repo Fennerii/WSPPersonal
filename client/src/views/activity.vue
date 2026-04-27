@@ -29,15 +29,11 @@
             <label class="label">Type</label>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="form.type">
+                <select v-model="form.typeId">
                   <option value="">Select type...</option>
-                  <option value="running">Running</option>
-                  <option value="gym">Gym</option>
-                  <option value="cycling">Cycling</option>
-                  <option value="swimming">Swimming</option>
-                  <option value="yoga">Yoga</option>
-                  <option value="hiking">Hiking</option>
-                  <option value="other">Other</option>
+                  <option v-for="type in activityTypes" :key="type.id" :value="type.id">
+                    {{ type.name }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -97,7 +93,7 @@
       <div class="columns is-vcentered">
         <div class="column">
           <p class="has-text-weight-bold">{{ activity.name }}</p>
-          <p class="has-text-grey is-size-7">{{ activity.type }} · {{ activity.date }}</p>
+          <p class="has-text-grey is-size-7">{{ activity.typeId }} · {{ activity.date }}</p>
           <p v-if="activity.notes" class="is-size-7 mt-1">{{ activity.notes }}</p>
         </div>
         <div class="column is-narrow">
@@ -106,7 +102,7 @@
           <button class="button is-small is-info is-light mr-1" @click="editActivity(activity)">
             <span class="icon"><i class="fas fa-edit"></i></span>
           </button>
-          <button class="button is-small is-danger is-light" @click="activitiesStore.deleteActivity(activity.id)">
+          <button class="button is-small is-danger is-light" @click="activitiesStore.remove(activity.id)">
             <span class="icon"><i class="fas fa-trash"></i></span>
           </button>
         </div>
@@ -117,39 +113,40 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
-import { useAuthStore } from '../stores/auth'
+import useSessionStore from '../stores/session'
 import { useActivitiesStore } from '../stores/activities'
-import type { Activity } from '../types/activity'
+import { useActivityTypesStore } from '../stores/activityTypes'
+import type { Activity } from '../../../server/types/index'
 
-const authStore = useAuthStore()
+const sessionStore = useSessionStore()
 const activitiesStore = useActivitiesStore()
+const activityTypesStore = useActivityTypesStore()
 
-const userActivities = computed(() =>
-  activitiesStore.getActivitiesByUser(authStore.currentUser!.id)
-)
+const activityTypes = computed(() => activityTypesStore.activityTypes)
+const userActivities = computed(() => activitiesStore.getByUser(sessionStore.user!.id))
 
 const showForm = ref(false)
 const editingActivity = ref<Activity | null>(null)
 const formError = ref(false)
 
-const defaultForm = { name: '', type: '', date: '', duration: 0, calories: 0, notes: '' }
+const defaultForm = { name: '', typeId: 0, date: '', duration: 0, calories: 0, notes: '' }
 const form = reactive({ ...defaultForm })
 
 function saveActivity() {
-  if (!form.name.trim() || !form.type || !form.date) {
+  if (!form.name.trim() || !form.typeId || !form.date) {
     formError.value = true
     return
   }
 
   if (editingActivity.value) {
-    activitiesStore.updateActivity(editingActivity.value.id, { ...form })
+    activitiesStore.update(editingActivity.value.id, { ...form })
   } else {
-    activitiesStore.addActivity({
+    activitiesStore.create({
       ...form,
-      userId: authStore.currentUser!.id,
+      userId: sessionStore.user!.id,
       duration: Number(form.duration),
       calories: Number(form.calories)
-    })
+    } as Activity)
   }
 
   showForm.value = false

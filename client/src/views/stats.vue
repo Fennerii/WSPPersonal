@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1 class="title">My Stats</h1>
-
     <div class="columns">
       <div class="column">
         <div class="box has-text-centered">
@@ -30,7 +29,6 @@
     </div>
 
     <h2 class="title is-5 mt-5">By Activity Type</h2>
-
     <div v-if="userActivities.length === 0" class="box has-text-grey">
       No activities yet.
     </div>
@@ -46,10 +44,9 @@
     </div>
 
     <h2 class="title is-5 mt-5">Most Recent</h2>
-
     <div v-if="mostRecent" class="box">
       <p class="has-text-weight-bold">{{ mostRecent.name }}</p>
-      <p class="has-text-grey is-size-7">{{ mostRecent.type }} · {{ mostRecent.date }}</p>
+      <p class="has-text-grey is-size-7">{{ mostRecent.typeId }} · {{ mostRecent.date }}</p>
       <div class="mt-2">
         <span class="tag is-primary is-light mr-2">{{ mostRecent.duration }} mins</span>
         <span class="tag is-warning is-light">{{ mostRecent.calories }} kcal</span>
@@ -63,35 +60,31 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useAuthStore } from '../stores/auth'
+import useSessionStore from '../stores/session'
 import { useActivitiesStore } from '../stores/activities'
 
-const authStore = useAuthStore()
+const sessionStore = useSessionStore()
 const activitiesStore = useActivitiesStore()
 
 const userActivities = computed(() =>
-  activitiesStore.getActivitiesByUser(authStore.currentUser!.id)
+  activitiesStore.getByUser(sessionStore.user!.id)
 )
-
 const totalMinutes = computed(() => userActivities.value.reduce((sum, a) => sum + a.duration, 0))
 const totalCalories = computed(() => userActivities.value.reduce((sum, a) => sum + a.calories, 0))
-
 const avgDuration = computed(() => {
   if (!userActivities.value.length) return 0
   return Math.round(totalMinutes.value / userActivities.value.length)
 })
-
 const byType = computed(() => {
   const result: Record<string, { count: number; minutes: number; calories: number }> = {}
   for (const a of userActivities.value) {
-    if (!result[a.type]) result[a.type] = { count: 0, minutes: 0, calories: 0 }
-    result[a.type].count++
-    result[a.type].minutes += a.duration
-    result[a.type].calories += a.calories
+    if (!result[a.typeId]) result[a.typeId] = { count: 0, minutes: 0, calories: 0 }
+    result[a.typeId].count++
+    result[a.typeId].minutes += a.duration
+    result[a.typeId].calories += a.calories
   }
   return result
 })
-
 const mostRecent = computed(() => {
   if (!userActivities.value.length) return null
   return [...userActivities.value].sort((a, b) =>

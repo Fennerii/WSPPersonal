@@ -63,7 +63,7 @@
 
       <div class="buttons">
         <button class="button is-primary" type="button" @click="saveUser">
-          {{editingUser ? 'Save Changes' : 'Add User'}}
+          {{ editingUser ? 'Save Changes' : 'Add User' }}
         </button>
         <button class="button" type="button" @click="showForm = false; editingUser = null">Cancel</button>
       </div>
@@ -99,12 +99,11 @@
                 <button class="button is-small is-info is-light" type="button" @click="editUser(user)">
                   <span class="icon"><i class="fas fa-edit"></i></span>
                 </button>
-                <!-- can't delete yourself -->
                 <button
                   class="button is-small is-danger is-light"
                   type="button"
-                  @click="usersStore.deleteUser(user.id)"
-                  :disabled="user.id === authStore.currentUser?.id"
+                  @click="usersStore.remove(user.id)"
+                  :disabled="user.id === sessionStore.user?.id"
                 >
                   <span class="icon"><i class="fas fa-trash"></i></span>
                 </button>
@@ -119,11 +118,11 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { useAuthStore } from '../stores/auth'
+import useSessionStore from '../stores/session'
 import { useUsersStore } from '../stores/users'
-import type { User } from '../types/user'
+import type { User } from '../../../server/types/index'
 
-const authStore = useAuthStore()
+const sessionStore = useSessionStore()
 const usersStore = useUsersStore()
 
 const showForm = ref(false)
@@ -140,9 +139,9 @@ function saveUser() {
   }
 
   if (editingUser.value) {
-    usersStore.updateUser(editingUser.value.id, { ...form })
+    usersStore.update(editingUser.value.id, { ...form })
   } else {
-    usersStore.addUser({ ...form })
+    usersStore.create({ ...form } as User)
   }
 
   showForm.value = false

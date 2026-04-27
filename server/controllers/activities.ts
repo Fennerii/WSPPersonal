@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { getAll, get, getByUser, getFriendFeed, getUserStats, create, update, remove, seed } from "../models/activities"
-import { Activity, DataEnvelope, DataListEnvelope } from "../types/index.ts"
+import { Activity, DataEnvelope, DataListEnvelope } from "../types/index"
 
 const app = Router()
 

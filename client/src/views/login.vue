@@ -7,24 +7,14 @@
             <div class="box">
               <h1 class="title has-text-centered">HeavyLifting</h1>
               <p class="subtitle has-text-centered has-text-grey">One Rep At A Time</p>
-
               <div class="field">
-                <label class="label">Sign in as</label>
+                <label class="label">Username</label>
                 <div class="control has-icons-left">
-                  <div class="select is-fullwidth">
-                    <select v-model="selectedUser">
-                      <option value="">Select a user...</option>
-                      <option v-for="user in usersStore.users" :key="user.id" :value="user">
-                        {{ user.name }} ({{ user.role }})
-                      </option>
-                    </select>
-                  </div>
+                  <input class="input" type="text" v-model="username" placeholder="Enter your username" />
                   <span class="icon is-left"><i class="fas fa-user"></i></span>
                 </div>
               </div>
-
-              <p v-if="error" class="has-text-danger mb-3">Please select a user.</p>
-
+              <p v-if="error" class="has-text-danger mb-3">{{ error }}</p>
               <button type="button" class="button is-primary is-fullwidth mt-4" @click="handleLogin">
                 Sign In
               </button>
@@ -39,23 +29,33 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
-import { useUsersStore } from '../stores/users'
-import type { User } from '../types/user'
+import useSessionStore from '../stores/session'
+import * as usersService from '../services/users.ts'
 
 const router = useRouter()
-const authStore = useAuthStore()
-const usersStore = useUsersStore()
+const sessionStore = useSessionStore()
 
-const selectedUser = ref<User | null>(null)
-const error = ref(false)
+const username = ref('')
+const error = ref('')
 
-function handleLogin() {
-  if (!selectedUser.value) {
-    error.value = true
+async function handleLogin() {
+  console.log('usersService:', usersService)
+  if (!username.value.trim()) {
+    error.value = 'Please enter a username.'
     return
   }
-  authStore.login(selectedUser.value)
-  router.push('/dashboard')
+  try {
+    const response = await usersService.login(username.value)
+    console.log('response:', response)
+    if (response.isSuccess) {
+      sessionStore.user = response.data
+      router.push('/dashboard')
+    } else {
+      error.value = 'User not found. Please try again.'
+    }
+  } catch (e) {
+    console.log('error:', e)
+    error.value = 'User not found. Please try again.'
+  }
 }
 </script>
