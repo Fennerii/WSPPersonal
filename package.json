@@ -5,8 +5,7 @@
     "scripts": {
         "dev": "tsx watch server/index.ts",
         "build": "tsc && npm run build:client",
-        "build:client": "cd client && npm install && npm run build",
-        "start": "node dist/index.js",
+"build:client": "cd client && npm install && VITE_API_ROOT=$VITE_API_ROOT npm run build"        "start": "node dist/index.js",
         "seed": "tsx server/models/seed_data.ts"
     },
     "dependencies": {
