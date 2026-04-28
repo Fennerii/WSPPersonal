@@ -1,4 +1,5 @@
-import { userKeys, type User } from "../types/index"
+import { sign } from "jsonwebtoken"
+import { userKeys, type User } from "../types"
 import { connect, filterKeys, toCamelCase, toSnakeCase } from "./supabase"
 
 const TABLE_NAME = "users"
@@ -34,6 +35,24 @@ export async function getByUsername(username: string): Promise<ItemType> {
         throw error
     }
     return toCamelCase(result.data) as ItemType
+}
+
+export async function login(username: string): Promise<{ token: string; user: ItemType }> {
+    const user = await getByUsername(username)
+    return new Promise((resolve, reject) => {
+        sign(
+            user,
+            process.env.JWT_SECRET || "secret",
+            { expiresIn: "1h" },
+            (err, token) => {
+                if (err || !token) {
+                    reject(err || new Error("Token generation failed"))
+                    return
+                }
+                resolve({ token, user })
+            },
+        )
+    })
 }
 
 export async function create(user: ItemType): Promise<ItemType> {
