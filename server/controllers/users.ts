@@ -13,6 +13,14 @@ app.post("/login", async (req, res) => {
     }
     res.send(response)
 })
+.post("/", async (req, res) => {
+    const newUser = await create(req.body)
+    const response: DataEnvelope<User> = {
+        data: newUser,
+        isSuccess: true,
+    }
+    res.send(response)
+})
 .get("/", requireAuth("admin"), async (req, res) => {
     const { list, count } = await getAll()
     const response: DataListEnvelope<User> = {
@@ -26,14 +34,6 @@ app.post("/login", async (req, res) => {
     const { id } = req.params
     const response: DataEnvelope<User> = {
         data: await get(Number(id)),
-        isSuccess: true,
-    }
-    res.send(response)
-})
-.post("/", requireAuth("admin"), async (req, res) => {
-    const newUser = await create(req.body)
-    const response: DataEnvelope<User> = {
-        data: newUser,
         isSuccess: true,
     }
     res.send(response)

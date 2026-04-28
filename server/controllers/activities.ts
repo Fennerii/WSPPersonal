@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { getAll, get, getByUser, getFriendFeed, getUserStats, create, update, remove, seed } from "../models/activities"
 import { Activity, DataEnvelope, DataListEnvelope } from "../types/index"
+import { requireAuth } from "../middleware/auth"
 
 const app = Router()
 
@@ -51,7 +52,16 @@ app.get("/", async (req, res) => {
     res.send(response)
 })
 .post("/", async (req, res) => {
-    const newActivity = await create(req.body)
+    const userId = req.user?.id ?? null
+    if (!userId) {
+        res.status(401).send({
+            data: null,
+            isSuccess: false,
+            message: "Unauthorized",
+        })
+        return
+    }
+    const newActivity = await create({ ...req.body, userId })
     const response: DataEnvelope<Activity> = {
         data: newActivity,
         isSuccess: true,
@@ -59,8 +69,16 @@ app.get("/", async (req, res) => {
     res.send(response)
 })
 .patch("/:id", async (req, res) => {
-    const { id } = req.params
-    const updatedActivity = await update(Number(id), req.body)
+    const userId = req.user?.id ?? null
+    if (!userId) {
+        res.status(401).send({
+            data: null,
+            isSuccess: false,
+            message: "Unauthorized",
+        })
+        return
+    }
+    const updatedActivity = await update(Number(req.params.id), req.body)
     const response: DataEnvelope<Activity> = {
         data: updatedActivity,
         isSuccess: true,
@@ -68,8 +86,16 @@ app.get("/", async (req, res) => {
     res.send(response)
 })
 .delete("/:id", async (req, res) => {
-    const { id } = req.params
-    const removedActivity = await remove(Number(id))
+    const userId = req.user?.id ?? null
+    if (!userId) {
+        res.status(401).send({
+            data: null,
+            isSuccess: false,
+            message: "Unauthorized",
+        })
+        return
+    }
+    const removedActivity = await remove(Number(req.params.id))
     const response: DataEnvelope<Activity> = {
         data: removedActivity,
         isSuccess: true,
@@ -77,7 +103,7 @@ app.get("/", async (req, res) => {
     }
     res.send(response)
 })
-.post("/seed", async (_req, res) => {
+.post("/seed", requireAuth("admin"), async (_req, res) => {
     const count = await seed()
     const response: DataEnvelope<number | null> = {
         data: count,
