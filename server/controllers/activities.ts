@@ -5,7 +5,7 @@ import { requireAuth } from "../middleware/auth"
 
 const app = Router()
 
-app.get("/", async (req, res) => {
+app.get("/", async (_req, res) => {
     const { list, count } = await getAll()
     const response: DataListEnvelope<Activity> = {
         data: list,

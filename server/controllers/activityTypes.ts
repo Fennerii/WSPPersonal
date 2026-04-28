@@ -4,7 +4,7 @@ import { ActivityType, DataEnvelope, DataListEnvelope } from "../types/index"
 
 const app = Router()
 
-app.get("/", async (req, res) => {
+app.get("/", async (_req, res) => {
     const { list, count } = await getAll()
     const response: DataListEnvelope<ActivityType> = {
         data: list,

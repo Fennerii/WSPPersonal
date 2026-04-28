@@ -21,7 +21,7 @@ app.post("/login", async (req, res) => {
     }
     res.send(response)
 })
-.get("/", requireAuth("admin"), async (req, res) => {
+.get("/", requireAuth("admin"), async (_req, res) => {
     const { list, count } = await getAll()
     const response: DataListEnvelope<User> = {
         data: list,
