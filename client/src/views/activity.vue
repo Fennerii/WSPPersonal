@@ -142,6 +142,7 @@ const scrollContainer = ref<HTMLElement | null>(null)
 async function loadMore() {
   if (isLoading.value || noMore.value) return
   isLoading.value = true
+  await new Promise(resolve => setTimeout(resolve, 500)) 
   try {
     const userId = sessionStore.user!.id
     const res = await sessionStore.api<{ data: Activity[], total: number }>(
