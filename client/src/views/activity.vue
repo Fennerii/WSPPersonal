@@ -80,10 +80,6 @@
       </div>
     </div>
 
-    <p class="has-text-grey mb-3" v-if="totalCount > 0">
-      Showing {{ activities.length }} of {{ totalCount }} activities
-    </p>
-
     <div v-if="activities.length === 0 && !isLoading" class="box has-text-grey">
       No activities yet. Add one above!
     </div>
@@ -111,6 +107,7 @@
 
       <div v-if="isLoading" class="has-text-centered mt-4 mb-4">
         <span class="loader"></span>
+        <p class="has-text-grey mt-2">Loading... {{ activities.length }} of {{ totalCount }} activities</p>
       </div>
 
       <p v-if="noMore && activities.length > 0" class="has-text-grey has-text-centered mt-4 mb-4">
@@ -142,7 +139,7 @@ const scrollContainer = ref<HTMLElement | null>(null)
 async function loadMore() {
   if (isLoading.value || noMore.value) return
   isLoading.value = true
-  await new Promise(resolve => setTimeout(resolve, 500)) 
+  await new Promise(resolve => setTimeout(resolve, 500))
   try {
     const userId = sessionStore.user!.id
     const res = await sessionStore.api<{ data: Activity[], total: number }>(
