@@ -118,7 +118,7 @@ export async function seed() {
         "Bench Press Day", "Pull Day", "Push Day", "Core Workout", "Stretching Session",
         "CrossFit WOD", "Spin Class", "Pilates", "Boxing Session", "Kettlebell Circuit",
     ]
-    const notes = ["felt great", "tough session", "new pb", "solid effort", "need more sleep", "crushed it", "", "", ""]
+    const notes = ["felt great", "tough session", "new pb", "solid effort", "need more sleep", "crushed it", "", "", "", "sore muscles", "amazing weather", "ran with friends", "solo session", "felt strong", "struggled a bit", "recovery day", "felt light", "pushed hard", "need to hydrate more", "great music playlist", "felt energized"]
     const items = []
     for (let i = 0; i < 50; i++) {
         const date = new Date(2026, 0, 1)
