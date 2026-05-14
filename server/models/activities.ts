@@ -26,9 +26,16 @@ export async function get(id: number): Promise<ItemType> {
     return toCamelCase(result.data) as ItemType
 }
 
-export async function getByUser(userId: number) {
+export async function getByUser(userId: number, page: number = 1, limit: number = 5) {
     const db = connect()
-    const result = await db.from(TABLE_NAME).select("*", { count: "estimated" }).eq("user_id", userId)
+    const from = (page - 1) * limit
+    const to = from + limit - 1
+    const result = await db
+        .from(TABLE_NAME)
+        .select("*", { count: "estimated" })
+        .eq("user_id", userId)
+        .order("date", { ascending: false })
+        .range(from, to)
     if (result.error) {
         throw result.error
     }
