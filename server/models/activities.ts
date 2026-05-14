@@ -111,14 +111,28 @@ export async function remove(id: number): Promise<ItemType> {
 
 export async function seed() {
     const db = connect()
-    const items = [
-        { user_id: 1, type_id: 1, name: "Running around the fountain", date: "2026-03-01", duration: 30, calories: 300, notes: "felt great" },
-        { user_id: 1, type_id: 2, name: "PPL Cycle 1", date: "2026-03-02", duration: 60, calories: 400, notes: "" },
-        { user_id: 2, type_id: 3, name: "park park park ride ride ride", date: "2026-03-01", duration: 45, calories: 350, notes: "" },
-        { user_id: 2, type_id: 4, name: "swimmin in circles", date: "2026-03-03", duration: 40, calories: 320, notes: "new pb" },
-        { user_id: 3, type_id: 5, name: "Upwards and Downwards Dog", date: "2026-03-02", duration: 30, calories: 150, notes: "" },
-        { user_id: 4, type_id: 6, name: "Trailing The Mountain", date: "2026-03-01", duration: 90, calories: 600, notes: "beautiful views" },
+    const activityNames = [
+        "Morning Run", "Evening Jog", "PPL Cycle", "Upper Body Day", "Leg Day",
+        "Park Bike Ride", "Swimming Laps", "Yoga Flow", "Mountain Trail", "HIIT Session",
+        "Jump Rope", "Rowing Machine", "Stairmaster", "Treadmill Walk", "Deadlift Day",
+        "Bench Press Day", "Pull Day", "Push Day", "Core Workout", "Stretching Session",
+        "CrossFit WOD", "Spin Class", "Pilates", "Boxing Session", "Kettlebell Circuit",
     ]
+    const notes = ["felt great", "tough session", "new pb", "solid effort", "need more sleep", "crushed it", "", "", ""]
+    const items = []
+    for (let i = 0; i < 50; i++) {
+        const date = new Date(2026, 0, 1)
+        date.setDate(date.getDate() + i)
+        items.push({
+            user_id: 1,
+            type_id: (i % 6) + 1,
+            name: activityNames[i % activityNames.length],
+            date: date.toISOString().split("T")[0],
+            duration: 20 + (i % 8) * 10,
+            calories: 150 + (i % 10) * 50,
+            notes: notes[i % notes.length],
+        })
+    }
     const result = await db.from(TABLE_NAME).insert(items)
     if (result.error) {
         throw result.error
