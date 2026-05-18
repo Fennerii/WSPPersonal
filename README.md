@@ -4,7 +4,7 @@ Web Server Programming Personal Project
 ## A little about yourself
 I got my associates in business admin from Community College
 in New Jersey. I switched my major to Computer Science after my second
-semester at New Paltz. I enrolled in New Paltz because it was the only school close enough
+semester at New Paltz. I enrolled in New Paltz because it was the only school close enough 
 to my house that had a late registration date. I am the Vice President of the Eleet Coders
 club along with being the President of CS Teams here on campus and I am the liaison for
 the Google Developer Group that was established here over the winter break
